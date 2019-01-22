@@ -37,6 +37,9 @@ class Creature(AbstractObject):
     def calc_max_HP(self):
         self.max_hp = 5 + self.stats["endurance"] * 2
 
+    def draw(self, display):
+        print("Hero")
+
 
 class Ally(AbstractObject, Interactive):
     def __init__(self, icon, action, position):
@@ -46,6 +49,9 @@ class Ally(AbstractObject, Interactive):
 
     def interact(self, engine, hero):
         self.action(engine, hero)
+
+    def draw(self, display):
+        print("Ally")
 
 
 class Enemy(Creature, Interactive):
