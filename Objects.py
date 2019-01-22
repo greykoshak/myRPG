@@ -11,26 +11,22 @@ def create_sprite(img, sprite_size):
     return sprite
 
 
-class Interactive(ABC):
+class AbstractObject(ABC):
+    def __init__(self):
+        pass
 
+    @abstractmethod
+    def draw(self, display):
+        pass
+
+
+class Interactive(ABC):
     @abstractmethod
     def interact(self, engine, hero):
         pass
 
 
-class Ally(AbstractObject, Interactive):
-
-    def __init__(self, icon, action, position):
-        self.sprite = icon
-        self.action = action
-        self.position = position
-
-    def interact(self, engine, hero):
-        self.action(engine, hero)
-
-
 class Creature(AbstractObject):
-
     def __init__(self, icon, stats, position):
         self.sprite = icon
         self.stats = stats
@@ -42,8 +38,27 @@ class Creature(AbstractObject):
         self.max_hp = 5 + self.stats["endurance"] * 2
 
 
-class Hero(Creature):
+class Ally(AbstractObject, Interactive):
+    def __init__(self, icon, action, position):
+        self.sprite = icon
+        self.action = action
+        self.position = position
 
+    def interact(self, engine, hero):
+        self.action(engine, hero)
+
+
+class Enemy(Creature, Interactive):
+    def __init__(self, icon, action, position):
+        self.sprite = icon
+        self.action = action
+        self.position = position
+
+    def interact(self, engine, hero):
+        self.action(engine, hero)
+
+
+class Hero(Creature):
     def __init__(self, stats, icon):
         pos = [1, 1]
         self.level = 1
@@ -62,7 +77,6 @@ class Hero(Creature):
 
 
 class Effect(Hero):
-
     def __init__(self, base):
         self.base = base
         self.stats = self.base.stats.copy()
@@ -125,5 +139,20 @@ class Effect(Hero):
         pass
 
 
-# FIXME
-# add classes
+        # FIXME
+        # add classes
+
+
+class Berserk(Effect):
+    def apply_effect(self):
+        pass
+
+
+class Blessing(Effect):
+    def apply_effect(self):
+        pass
+
+
+class Weakness(Effect):
+    def apply_effect(self):
+        pass

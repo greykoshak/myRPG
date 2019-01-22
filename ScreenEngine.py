@@ -30,6 +30,8 @@ class ScreenHandle(pygame.Surface):
             self.successor.draw(canvas)
 
     # FIXME connect_engine -----
+    def connect_engine(self, engine):
+        pass
 
 
 class GameSurface(ScreenHandle):
