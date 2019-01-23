@@ -5,7 +5,6 @@ import ScreenEngine as SE
 import Logic
 import Service
 
-
 SCREEN_DIM = (800, 600)
 
 pygame.init()
@@ -15,6 +14,7 @@ KEYBOARD_CONTROL = True
 
 if not KEYBOARD_CONTROL:
     import numpy as np
+
     answer = np.zeros(4, dtype=float)
 
 base_stats = {
@@ -34,13 +34,13 @@ def create_game(sprite_size, is_new):
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
         if True:
-           drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 0),
-                                   SE.ProgressBar((640, 120), (0, 480),
-                                                  SE.InfoWindow((160, 600), (640, 0),
-                                                                SE.HelpWindow((700, 500), pygame.SRCALPHA, (50, 50),
-                                                                              SE.ScreenHandle(
-                                                                                  (0, 0))
-                                                                              ))))
+            drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 0),
+                                    SE.ProgressBar((640, 120), (0, 480),
+                                                   SE.InfoWindow((160, 600), (640, 0),
+                                                                 SE.HelpWindow((700, 500), pygame.SRCALPHA, (50, 50),
+                                                                               SE.ScreenHandle(
+                                                                                   (0, 0))
+                                                                               ))))
     else:
         engine.sprite_size = sprite_size
         hero.sprite = Service.create_sprite(
@@ -64,7 +64,7 @@ while engine.working:
             if event.type == pygame.QUIT:
                 engine.working = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_h:
+                if event.key == pygame.K_F1:
                     engine.show_help = not engine.show_help
                 if event.key == pygame.K_m:
                     engine.show_map = not engine.show_map
@@ -79,16 +79,16 @@ while engine.working:
                 if event.key == pygame.K_ESCAPE:
                     engine.working = False
                 if engine.game_process:
-                    if event.key == pygame.K_UP :
+                    if event.key == pygame.K_UP:
                         engine.move_up()
                         iteration += 1
-                    elif event.key == pygame.K_DOWN :
+                    elif event.key == pygame.K_DOWN:
                         engine.move_down()
                         iteration += 1
-                    elif event.key == pygame.K_LEFT :
+                    elif event.key == pygame.K_LEFT:
                         engine.move_left()
                         iteration += 1
-                    elif event.key == pygame.K_RIGHT :
+                    elif event.key == pygame.K_RIGHT:
                         engine.move_right()
                         iteration += 1
                 else:

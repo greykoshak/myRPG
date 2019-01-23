@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import pygame
 import random
 
+
 def create_sprite(img, sprite_size):
     icon = pygame.image.load(img).convert_alpha()
     icon = pygame.transform.scale(icon, (sprite_size, sprite_size))
@@ -150,13 +151,13 @@ class Enemy(Creature, Interactive):
 
     def interact(self, engine, hero):
 
-        if type(engine.hero) is Superman:
+        if type(engine.hero) is Batman:
             engine.hero.exp += self.exp
             engine.hero = engine.hero.base
         else:
-            f_str = hero.stats["strength"] - random.randint(1, engine.level)*self.stats["strength"]
-            f_endr = hero.stats["endurance"] - random.randint(1, engine.level)*self.stats["endurance"]
-            f_luck = hero.stats["luck"] - random.randint(1, engine.level)*self.stats["luck"]
+            f_str = hero.stats["strength"] - random.randint(1, engine.level) * self.stats["strength"]
+            f_endr = hero.stats["endurance"] - random.randint(1, engine.level) * self.stats["endurance"]
+            f_luck = hero.stats["luck"] - random.randint(1, engine.level) * self.stats["luck"]
 
             summary = f_str + f_endr + f_luck
 
@@ -206,7 +207,7 @@ class Weakness(Effect):
         self.stats["luck"] = 1
 
 
-class Superman(Effect):
+class Batman(Effect):
 
     def __init__(self, base):
         super().__init__(base)

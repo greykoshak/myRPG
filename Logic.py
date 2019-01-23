@@ -11,6 +11,12 @@ class GameEngine:
     score = 0.
     game_process = True
     show_help = False
+    show_map = False
+
+    # added myself
+    sprite_size = None
+    sprite_size_mini = 14
+    start = [5, 2]
 
     def subscribe(self, obj):
         self.subscribers.add(obj)

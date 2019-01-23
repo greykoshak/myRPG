@@ -40,10 +40,10 @@ def restore_hp(engine, hero):
 
 
 def apply_blessing(engine, hero):
-    if hero.gold >= int(20 * 1.5 ** engine.level) - 2 * hero.stats["intelligence"]:
+    if hero.gold >= int(20 * 1.5**engine.level) - 2 * hero.stats["intelligence"]:
         engine.score += 0.2
-        hero.gold -= int(20 * 1.5 ** engine.level) - \
-                     2 * hero.stats["intelligence"]
+        hero.gold -= int(20 * 1.5**engine.level) - \
+            2 * hero.stats["intelligence"]
         if random.randint(0, 1) == 0:
             engine.hero = Objects.Blessing(hero)
             engine.notify("Blessing applied")
@@ -54,16 +54,16 @@ def apply_blessing(engine, hero):
         engine.score -= 0.1
 
 
-def superman_effect(engine, hero):
+def superman_effect (engine, hero):
     hero.hp = hero.max_hp
     engine.hero = Objects.Superman(hero)
     engine.notify("You are Superman!")
 
 
 def remove_effect(engine, hero):
-    if hero.gold >= int(10 * 1.5 ** engine.level) - 2 * hero.stats["intelligence"] and "base" in dir(hero):
-        hero.gold -= int(10 * 1.5 ** engine.level) - \
-                     2 * hero.stats["intelligence"]
+    if hero.gold >= int(10 * 1.5**engine.level) - 2 * hero.stats["intelligence"] and "base" in dir(hero):
+        hero.gold -= int(10 * 1.5**engine.level) - \
+            2 * hero.stats["intelligence"]
         engine.hero = hero.base
         engine.hero.calc_max_HP()
         engine.notify("Effect removed")
@@ -76,7 +76,7 @@ def add_gold(engine, hero):
         engine.notify("You were cursed")
     else:
         engine.score += 0.1
-        gold = int(random.randint(10, 1000) * (1.1 ** (engine.hero.level - 1)))
+        gold = int(random.randint(10, 1000) * (1.1**(engine.hero.level - 1)))
         hero.gold += gold
         engine.notify(f"{gold} gold added")
 
@@ -85,6 +85,7 @@ class MapFactory(yaml.YAMLObject):
 
     @classmethod
     def from_yaml(cls, loader, node):
+
         # FIXME
         # get _map and _obj
 
@@ -97,6 +98,7 @@ class MapFactory(yaml.YAMLObject):
 
 
 class EndMap(MapFactory):
+
     yaml_tag = "!end_map"
 
     class Map:
@@ -118,7 +120,7 @@ class EndMap(MapFactory):
             for i in self.Map:
                 for j in range(len(i)):
                     i[j] = wall if i[j] == '0' else floor1
-
+         
         def get_map(self):
             return self.Map
 
@@ -371,6 +373,7 @@ wall = [0]
 floor1 = [0]
 floor2 = [0]
 floor3 = [0]
+
 
 m_wall = [0]
 m_floor1 = [0]

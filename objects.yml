@@ -25,6 +25,11 @@ ally:
     action: restore_hp
     min-count: 0
     max-count: 3
+  superman:
+    sprite: [MyAlly.png]
+    action: superman_effect
+    min-count: 1
+    max-count: 2
 enemies:
   rat:
     sprite: [rat.png]
@@ -54,3 +59,10 @@ enemies:
     intelligence: 50
     luck: 5
     experience: 1000
+  pennywise:
+    sprite: [MyEnemy.png]
+    strength: 150
+    endurance: 150
+    intelligence: 50
+    luck: 50
+    experience: 1500
