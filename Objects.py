@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import pygame
 import random
 
-
 def create_sprite(img, sprite_size):
     icon = pygame.image.load(img).convert_alpha()
     icon = pygame.transform.scale(icon, (sprite_size, sprite_size))
@@ -11,22 +10,36 @@ def create_sprite(img, sprite_size):
     return sprite
 
 
-class AbstractObject(ABC):
-    def __init__(self):
-        pass
-
-    @abstractmethod
-    def draw(self, display):
-        pass
-
-
 class Interactive(ABC):
+
     @abstractmethod
     def interact(self, engine, hero):
         pass
 
 
+class AbstractObject(ABC):
+
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    def draw(self, surface):
+        pass
+
+
+class Ally(AbstractObject, Interactive):
+
+    def __init__(self, icon, action, position):
+        self.sprite = icon
+        self.action = action
+        self.position = position
+
+    def interact(self, engine, hero):
+        self.action(engine, hero)
+
+
 class Creature(AbstractObject):
+
     def __init__(self, icon, stats, position):
         self.sprite = icon
         self.stats = stats
@@ -37,36 +50,12 @@ class Creature(AbstractObject):
     def calc_max_HP(self):
         self.max_hp = 5 + self.stats["endurance"] * 2
 
-    def draw(self, display):
-        print("Hero")
-
-
-class Ally(AbstractObject, Interactive):
-    def __init__(self, icon, action, position):
-        self.sprite = icon
-        self.action = action
-        self.position = position
-
-    def interact(self, engine, hero):
-        self.action(engine, hero)
-
-    def draw(self, display):
-        print("Ally")
-
-
-class Enemy(Creature, Interactive):
-    def __init__(self, icon, action, position):
-        self.sprite = icon
-        self.action = action
-        self.position = position
-
-    def interact(self, engine, hero):
-        self.action(engine, hero)
-
 
 class Hero(Creature):
+
     def __init__(self, stats, icon):
-        pos = [1, 1]
+        pos = [5, 2]
+        self.start = pos
         self.level = 1
         self.exp = 0
         self.gold = 0
@@ -74,15 +63,18 @@ class Hero(Creature):
 
     def level_up(self):
         while self.exp >= 100 * (2 ** (self.level - 1)):
-            yield "level up!"
             self.level += 1
             self.stats["strength"] += 2
             self.stats["endurance"] += 2
             self.calc_max_HP()
             self.hp = self.max_hp
 
+    def draw(self, surface, sprite_size):
+        surface.blit(self.sprite, (sprite_size * 5, sprite_size * 2))
+
 
 class Effect(Hero):
+
     def __init__(self, base):
         self.base = base
         self.stats = self.base.stats.copy()
@@ -145,20 +137,79 @@ class Effect(Hero):
         pass
 
 
-        # FIXME
-        # add classes
+# FIXME
+# add classes
+class Enemy(Creature, Interactive):
+
+    def __init__(self, icon, stats, xp, position):
+        super().__init__(icon, stats, position)
+        self.exp = xp
+
+    def draw(self, surface):
+        surface.blit(self.sprite, self.position)
+
+    def interact(self, engine, hero):
+
+        if type(engine.hero) is Superman:
+            engine.hero.exp += self.exp
+            engine.hero = engine.hero.base
+        else:
+            f_str = hero.stats["strength"] - random.randint(1, engine.level)*self.stats["strength"]
+            f_endr = hero.stats["endurance"] - random.randint(1, engine.level)*self.stats["endurance"]
+            f_luck = hero.stats["luck"] - random.randint(1, engine.level)*self.stats["luck"]
+
+            summary = f_str + f_endr + f_luck
+
+            if summary >= 0:
+                engine.hero.exp += self.exp
+                engine.score += 0.02 * summary
+
+            elif summary < 0:
+                engine.hero.exp += int(0.1 * self.exp)
+                engine.hero.hp += int(0.2 * summary)
+
+                if engine.hero.hp <= 0:
+                    engine.score += 0.1 * engine.hero.hp
+                    engine.hero.hp = 1
+
+                elif engine.hero.hp > 0:
+                    engine.score -= 0.02 * summary
+
+        engine.hero.level_up()
 
 
 class Berserk(Effect):
+
+    def __init__(self, base):
+        super().__init__(base)
+
     def apply_effect(self):
-        pass
+        self.stats["strength"] *= 2
 
 
 class Blessing(Effect):
+
+    def __init__(self, base):
+        super().__init__(base)
+
     def apply_effect(self):
-        pass
+        self.stats["luck"] *= 2
 
 
 class Weakness(Effect):
+
+    def __init__(self, base):
+        super().__init__(base)
+
     def apply_effect(self):
-        pass
+        self.stats["strength"] = 1
+        self.stats["luck"] = 1
+
+
+class Superman(Effect):
+
+    def __init__(self, base):
+        super().__init__(base)
+
+    def apply_effect(self):
+        self.stats["strength"] = 9999

@@ -1,9 +1,10 @@
 import pygame
 import os
 import Objects
-import ScreenEngine
+import ScreenEngine as SE
 import Logic
 import Service
+
 
 SCREEN_DIM = (800, 600)
 
@@ -14,7 +15,6 @@ KEYBOARD_CONTROL = True
 
 if not KEYBOARD_CONTROL:
     import numpy as np
-
     answer = np.zeros(4, dtype=float)
 
 base_stats = {
@@ -33,15 +33,14 @@ def create_game(sprite_size, is_new):
         engine = Logic.GameEngine()
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
-        with ScreenEngine as SE:
-            drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 480),
-                                    SE.ProgressBar((640, 120), (640, 0),
-                                                   SE.InfoWindow((160, 600), (50, 50),
-                                                                 SE.HelpWindow((700, 500), pygame.SRCALPHA, (0, 0),
-                                                                               SE.ScreenHandle(
-                                                                                   (0, 0))
-                                                                               ))))
-
+        if True:
+           drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 0),
+                                   SE.ProgressBar((640, 120), (0, 480),
+                                                  SE.InfoWindow((160, 600), (640, 0),
+                                                                SE.HelpWindow((700, 500), pygame.SRCALPHA, (50, 50),
+                                                                              SE.ScreenHandle(
+                                                                                  (0, 0))
+                                                                              ))))
     else:
         engine.sprite_size = sprite_size
         hero.sprite = Service.create_sprite(
@@ -67,10 +66,12 @@ while engine.working:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_h:
                     engine.show_help = not engine.show_help
-                if event.key == pygame.K_KP_PLUS:
+                if event.key == pygame.K_m:
+                    engine.show_map = not engine.show_map
+                if event.key == pygame.K_KP_PLUS and (not engine.show_map):
                     size = size + 1
                     create_game(size, False)
-                if event.key == pygame.K_KP_MINUS:
+                if event.key == pygame.K_KP_MINUS and (not engine.show_map):
                     size = size - 1
                     create_game(size, False)
                 if event.key == pygame.K_r:
@@ -78,20 +79,20 @@ while engine.working:
                 if event.key == pygame.K_ESCAPE:
                     engine.working = False
                 if engine.game_process:
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_UP :
                         engine.move_up()
                         iteration += 1
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key == pygame.K_DOWN :
                         engine.move_down()
                         iteration += 1
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == pygame.K_LEFT :
                         engine.move_left()
                         iteration += 1
-                    elif event.key == pygame.K_RIGHT:
+                    elif event.key == pygame.K_RIGHT :
                         engine.move_right()
                         iteration += 1
                 else:
-                    if event.key == pygame.K_RETURN:
+                    if event.key == pygame.K_RETURN and (not engine.show_map):
                         create_game()
     else:
         for event in pygame.event.get():
@@ -115,7 +116,6 @@ while engine.working:
 
     gameDisplay.blit(drawer, (0, 0))
     drawer.draw(gameDisplay)
-
     pygame.display.update()
 
 pygame.display.quit()
