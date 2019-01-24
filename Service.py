@@ -54,10 +54,10 @@ def apply_blessing(engine, hero):
         engine.score -= 0.1
 
 
-def superman_effect (engine, hero):
+def batman_effect (engine, hero):
     hero.hp = hero.max_hp
-    engine.hero = Objects.Superman(hero)
-    engine.notify("You are Superman!")
+    engine.hero = Objects.Batman(hero)
+    engine.notify("You are Batman!")
 
 
 def remove_effect(engine, hero):
@@ -426,7 +426,7 @@ def service_init(sprite_size, full=True):
                            'apply_blessing': apply_blessing,
                            'remove_effect': remove_effect,
                            'restore_hp': restore_hp,
-                           'superman_effect': superman_effect
+                           'batman_effect': batman_effect
                            }
 
     for obj in object_list_prob['objects']:

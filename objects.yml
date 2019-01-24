@@ -25,9 +25,9 @@ ally:
     action: restore_hp
     min-count: 0
     max-count: 3
-  superman:
+  batman:
     sprite: [MyAlly.png]
-    action: superman_effect
+    action: batman_effect
     min-count: 1
     max-count: 2
 enemies:
