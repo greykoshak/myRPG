@@ -64,7 +64,7 @@ while engine.working:
             if event.type == pygame.QUIT:
                 engine.working = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F1:
+                if event.key == pygame.K_h:
                     engine.show_help = not engine.show_help
                 if event.key == pygame.K_m:
                     engine.show_map = not engine.show_map

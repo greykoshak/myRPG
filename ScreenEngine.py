@@ -254,7 +254,7 @@ class HelpWindow(ScreenHandle):
         self.data.append(["Left", "Move Left"])
         self.data.append(["Up", "Move Top"])
         self.data.append(["Down", "Move Bottom"])
-        self.data.append(["F1", "Show Help"])
+        self.data.append([" H ", "Show Help"])
         self.data.append(["Num+", "Zoom +"])
         self.data.append(["Num-", "Zoom -"])
         self.data.append([" R ", "Restart Game"])
